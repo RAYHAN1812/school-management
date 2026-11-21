@@ -10,3 +10,4 @@ coverage/
 server/.local-pg/
 server/src/uploads/*
 !server/src/uploads/.gitkeep
+.neon
