@@ -1,0 +1,7 @@
+node_modules
+.local-pg
+.env
+.env.*
+tests
+coverage
+src/uploads/*

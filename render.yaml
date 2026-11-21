@@ -1,0 +1,35 @@
+# Render blueprint for the API (https://render.com/docs/blueprint-spec).
+# Database: use Neon (or Render Postgres) and paste its connection string into DATABASE_URL.
+services:
+  - type: web
+    name: edumanage-api
+    runtime: node
+    rootDir: server
+    plan: free
+    buildCommand: npm install && npx prisma generate
+    # Apply migrations on every deploy, then start.
+    startCommand: npx prisma migrate deploy && node src/server.js
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        sync: false # set in the dashboard (Neon connection string, with ?sslmode=require)
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_EXPIRES_IN
+        value: 1d
+      - key: CLIENT_URL
+        sync: false # e.g. https://edumanage.vercel.app
+      - key: API_PUBLIC_URL
+        sync: false # e.g. https://edumanage-api.onrender.com (needed for online payments)
+      - key: COOKIE_SECURE
+        value: "true"
+      - key: COOKIE_SAMESITE
+        value: lax
+      - key: SSLCOMMERZ_STORE_ID
+        sync: false
+      - key: SSLCOMMERZ_STORE_PASSWORD
+        sync: false
+      - key: SSLCOMMERZ_SANDBOX
+        value: "true"
